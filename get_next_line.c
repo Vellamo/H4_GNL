@@ -6,7 +6,7 @@
 /*   By: lharvey <lharvey@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 09:58:12 by lharvey           #+#    #+#             */
-/*   Updated: 2022/11/24 14:45:28 by lharvey          ###   ########.fr       */
+/*   Updated: 2022/11/24 14:53:47 by lharvey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,9 @@
 
 char	*get_next_line(int fd)
 {
-	static char	*array[fd];
+	static char	*array[FD_SIZE];
 	char		buffer[BUFFER_SIZE + 1];
+	char		**line;
 	int			read_return;
 
 	read_return = 1;
