@@ -6,7 +6,7 @@
 /*   By: lharvey <lharvey@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 09:58:12 by lharvey           #+#    #+#             */
-/*   Updated: 2022/11/29 17:01:01 by lharvey          ###   ########.fr       */
+/*   Updated: 2022/11/29 17:08:43 by lharvey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,14 +87,14 @@ int		line_output(char **string, char **line)
 
 char	*get_next_line(int fd)
 {
-	static char	*array[BUFFER_SIZE];
+	static char	*array[fd];
 	char		buffer[BUFFER_SIZE + 1];
 	char		**line;
 	int			read_return;
 
 	read_return = 1;
-	if (fd < 0 || BUFFER_SIZE < 1)
-		return ((char *)-1);
+	if (fd < 0 || !line || fd > BUFFER_SIZE|| BUFFER_SIZE < 1)
+		return (-1);
 	while ((read_return = (read(fd, buffer, BUFFER_SIZE))) > 0)
 	{
 		buffer[read_return] = '\0';
@@ -112,5 +112,5 @@ char	*get_next_line(int fd)
 		return (NULL);
 	if (read_return != -1)
 		read_return = line_output(&(array[fd]), line);
-	return (read_return);
+	return (line);
 }
