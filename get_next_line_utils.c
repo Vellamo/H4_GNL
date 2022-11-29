@@ -1,4 +1,4 @@
-
+#include "get_next_line.h"
 
 size_t	ft_strlen(const char *s)
 {
@@ -10,7 +10,7 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-char	*ft_jstrcpy(char *dst, const char *src)
+static char	*ft_jstrcpy(char *dst, const char *src)
 {
 	int		i;
 
@@ -24,7 +24,7 @@ char	*ft_jstrcpy(char *dst, const char *src)
 	return (dst);
 }
 
-char	*ft_jstrcat(char *s1, const char *s2)
+static char	*ft_jstrcat(char *s1, const char *s2)
 {
 	int	i;
 	int	j;
@@ -47,7 +47,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	unsigned int	strlens;
 
 	if (!s1 && !s2)
-		return (NULL);
+		return (0);
 	else if (!s1)
 		return ((char *)s2);
 	else if (!s2)
