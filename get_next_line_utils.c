@@ -69,3 +69,29 @@ char	*ft_strdup(const char *s1)
 	else
 		return (NULL);
 }
+
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
+	char			*fresh;
+	size_t			i;
+	size_t			strlen;
+
+	i = 0;
+	if (!s || !len)
+		return (ft_strdup("\0"));
+	strlen = ft_strlen(s) + 1;
+	if (start > strlen)
+		return (ft_strdup("\0"));
+	if (len > ft_strlen(&(s[start])))
+		len = ft_strlen(&(s[start]));
+	fresh = (char *)malloc((len + 1) * (sizeof(char)));
+	if (!fresh)
+		return (NULL);
+	while (i < len && s[start + i])
+	{
+		fresh[i] = s[start + i];
+		i++;
+	}
+	fresh[i] = '\0';
+	return (fresh);
+}

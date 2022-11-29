@@ -6,7 +6,7 @@
 /*   By: lharvey <lharvey@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 09:58:12 by lharvey           #+#    #+#             */
-/*   Updated: 2022/11/29 16:47:39 by lharvey          ###   ########.fr       */
+/*   Updated: 2022/11/29 16:56:54 by lharvey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,12 +86,12 @@ int		line_output(char **string, char **line)
 		i++;
 	if ((*string)[i] == '\n')
 	{
-		*line = ft_strsub(*string, 0, i);
+		*line = ft_substr(*string, 0, i);
 		temp = ft_strdup(&((*string)[i + 1]));
-		ft_strdel(string);
+		ft_strdel((void **)string);
 		*string = temp;
 		if ((*string)[0] == '\0')
-			ft_strdel(string);
+			ft_strdel((void **)string);
 	}
 	else
 	{
@@ -110,7 +110,7 @@ char	*get_next_line(int fd)
 
 	read_return = 1;
 	if (fd < 0 || BUFFER_SIZE < 1)
-		return (-1);
+		return ((char *)-1);
 	while ((read_return = (read(fd, buffer, BUFFER_SIZE))) > 0)
 	{
 		buffer[read_return] = '\0';
