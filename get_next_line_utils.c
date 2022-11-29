@@ -1,13 +1,5 @@
 #include "get_next_line.h"
 
-void	ft_strdel(void **as)
-{
-	if (!as)
-		return ;
-	free(*as);
-	*as = 0;
-}
-
 size_t	ft_strlen(const char *s)
 {
 	size_t i;
@@ -18,32 +10,27 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-static char	*join_strings(char const *s1, char const *s2)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
 	unsigned int	s1len;
 	unsigned int	s2len;
 	char			*string;
 
-	s1len = ft_strlen(s1);
-	s2len = ft_strlen(s2);
-	string = (char *)malloc(((s1len + s2len) + 1) * (sizeof(char)));
-	if (!string)
-		return (0);
-	ft_memcpy(string, s1, s1len);
-	ft_memcpy(&string[s1len], s2, s2len);
-	string[s1len + s2len] = '\0';
-	return (string);
-}
-
-char	*ft_strjoin(char const *s1, char const *s2)
-{
 	if (!s1 && !s2)
 		return (NULL);
 	else if (!s1)
 		return ((char *)s2);
 	else if (!s2)
 		return ((char *)s1);
-	return (join_strings(s1, s2));
+	s1len = ft_strlen(s1);
+	s2len = ft_strlen(s2);
+	string = (char *)malloc(((s1len + s2len) + 1) * (sizeof(char)));
+	if (!string)
+		return (NULL);
+	ft_memcpy(string, s1, s1len);
+	ft_memcpy(&string[s1len], s2, s2len);
+	string[s1len + s2len] = '\0';
+	return (string);
 }
 
 char	*ft_strdup(const char *s1)
