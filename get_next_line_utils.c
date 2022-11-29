@@ -10,7 +10,7 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-static char	*ft_jstrcpy(char *dst, const char *src)
+char	*ft_jstrcpy(char *dst, const char *src)
 {
 	int		i;
 
@@ -24,7 +24,7 @@ static char	*ft_jstrcpy(char *dst, const char *src)
 	return (dst);
 }
 
-static char	*ft_jstrcat(char *s1, const char *s2)
+char	*ft_jstrcat(char *s1, const char *s2)
 {
 	int	i;
 	int	j;
