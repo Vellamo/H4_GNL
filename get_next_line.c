@@ -6,7 +6,7 @@
 /*   By: lharvey <lharvey@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 09:58:12 by lharvey           #+#    #+#             */
-/*   Updated: 2022/11/30 13:38:40 by lharvey          ###   ########.fr       */
+/*   Updated: 2022/11/30 14:37:04 by lharvey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,10 @@ void	buffer_add(char *buffer, char **array)
 
 /*
 ** line_output finds a defined EOF. Frees memory not needed.
-** Returns value based on **line output.
+** Returns value based on **line output for GNL.c to use.
 */
 
-int		line_output(char **string, char **line)
+int	line_output(char **string, char **line)
 {
 	unsigned int	i;
 	char			*temp;
@@ -82,7 +82,7 @@ int		line_output(char **string, char **line)
 
 /*
 ** Read continues until \n is found, upon which it breaks the loop.
-** If the array is empty and read is finished, returns 0
+** If the array is empty and read is finished, returns NULL
 */
 
 char	*get_next_line(int fd)
@@ -94,9 +94,9 @@ char	*get_next_line(int fd)
 
 	read_return = 1;
 	if (!BUFFER_SIZE)
-		BUFFER_SIZE = 1;
-	if (fd < 0 || !line || fd > FD_SIZE|| BUFFER_SIZE < 1)
-		return (-1);
+		return (NULL);
+	if (fd < 0 || !line || fd > FD_SIZE || BUFFER_SIZE < 1)
+		return (NULL);
 	while ((read_return = (read(fd, buffer, BUFFER_SIZE))) > 0)
 	{
 		buffer[read_return] = '\0';
