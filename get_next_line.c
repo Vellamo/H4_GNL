@@ -6,7 +6,7 @@
 /*   By: lharvey <lharvey@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 09:58:12 by lharvey           #+#    #+#             */
-/*   Updated: 2022/11/30 14:37:04 by lharvey          ###   ########.fr       */
+/*   Updated: 2022/12/02 12:19:24 by lharvey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char	*ft_strchr(const char *s, int c)
 ** Overlap-safe way to add new data to the existing data.
 */
 
-void	buffer_add(char *buffer, char **array)
+static void	buffer_add(char *buffer, char **array)
 {
 	char		*swap;
 
@@ -53,7 +53,7 @@ void	buffer_add(char *buffer, char **array)
 ** Returns value based on **line output for GNL.c to use.
 */
 
-int	line_output(char **string, char **line)
+static int	line_output(char **string, char **line)
 {
 	unsigned int	i;
 	char			*temp;
@@ -75,7 +75,7 @@ int	line_output(char **string, char **line)
 	else
 	{
 		*line = ft_strdup(*string);
-		ft_strdel(string);
+		ft_strdel((void **)string);
 	}
 	return (1);
 }
@@ -93,9 +93,10 @@ char	*get_next_line(int fd)
 	int			read_return;
 
 	read_return = 1;
+	line = 0;
 	if (!BUFFER_SIZE)
 		return (NULL);
-	if (fd < 0 || !line || fd > FD_SIZE || BUFFER_SIZE < 1)
+	if (fd < 0 || fd > FD_SIZE || BUFFER_SIZE < 1)
 		return (NULL);
 	while ((read_return = (read(fd, buffer, BUFFER_SIZE))) > 0)
 	{
@@ -114,5 +115,5 @@ char	*get_next_line(int fd)
 		return (NULL);
 	if (read_return != -1)
 		read_return = line_output(&(array[fd]), line);
-	return (line);
+	return (*line);
 }
