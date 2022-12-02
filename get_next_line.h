@@ -6,7 +6,7 @@
 /*   By: lharvey <lharvey@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 10:00:18 by lharvey           #+#    #+#             */
-/*   Updated: 2022/12/02 14:04:30 by lharvey          ###   ########.fr       */
+/*   Updated: 2022/12/02 16:08:28 by lharvey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 
 void	*ft_memcpy(void *dst, const void *src, size_t n);
 void	ft_strdel(void **as);
-size_t	ft_strlen(const char *s);
 char	*ft_strchr(const char *s, int c);
+size_t	ft_strlen(const char *s);
 char	*ft_strdup(const char *s1);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strjoin(char const *s1, char const *s2);
