@@ -43,9 +43,9 @@ static void	buffer_add(char *buffer, char *array)
 {
 	char		*swap;
 
-	swap = ft_strjoin(*array, buffer);
-	free(*array);
-	*array = swap;
+	swap = ft_strjoin(array, buffer);
+	free(array);
+	array = swap;
 }
 
 /*
@@ -53,7 +53,7 @@ static void	buffer_add(char *buffer, char *array)
 ** Returns value based on **line output for GNL.c to use.
 */
 
-static void	line_output(char *string, char *line)
+static char	*line_output(char *string, char *line)
 {
 	unsigned int	i;
 	char			*temp;
@@ -75,7 +75,7 @@ static void	line_output(char *string, char *line)
 		line = ft_strdup(string);
 		ft_strdel((void **)string);
 	}
-	return ();
+	return (line);
 }
 
 /*
@@ -85,7 +85,7 @@ static void	line_output(char *string, char *line)
 
 char	*get_next_line(int fd)
 {
-	static char	*array;
+	static char	**array;
 	char		buffer[BUFFER_SIZE + 1];
 	char		*line;
 	int			read_return;
@@ -101,17 +101,18 @@ char	*get_next_line(int fd)
 		buffer[read_return] = '\0';
 		if (array[fd] == NULL)
 		{
-			if (!(array[fd] = ft_strdup(buffer)))
+			array[fd] = ft_strdup(buffer);
+			if (!(array[fd]))
 				return (NULL);
 		}
 		else
-			buffer_add((char *)buffer, &(array[fd]));
-		if (ft_strchr(array[fd], '\n'))
+			buffer_add((char *)buffer, array[fd]);
+		if (ft_strchr(&(array[fd]), '\n'))
 			break ;
 	}
 	if ((read_return == 0) && (array[fd] == NULL))
 		return (NULL);
 	if (read_return != -1)
-		line_output(&(array[fd]), line);
-	return (line);
+		return (line_output(array[fd]), line));
+	return (NULL);
 }
