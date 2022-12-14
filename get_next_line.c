@@ -39,7 +39,7 @@ char	*ft_strchr(const char *s, int c)
 ** Overlap-safe way to add new data to the existing data.
 */
 
-static void	buffer_add(char *buffer, char **array)
+static void	buffer_add(char *buffer, char *array)
 {
 	char		*swap;
 
@@ -53,20 +53,18 @@ static void	buffer_add(char *buffer, char **array)
 ** Returns value based on **line output for GNL.c to use.
 */
 
-static int	line_output(char *string, char *line)
+static void	line_output(char *string, char *line)
 {
 	unsigned int	i;
 	char			*temp;
 
 	i = 0;
-	if (!string)
-		return (-1);
-	while ((string[i]) != '\0' && (*string)[i] != '\n')
+	while ((string[i]) != '\0' && (string[i]) != '\n')
 		i++;
-	if ((string)[i]) == '\n')
+	if ((string[i]) == '\n')
 	{
 		line = ft_substr(string, 0, i);
-		temp = ft_strdup((string[i + 1]));
+		temp = ft_strdup(&(string[i + 1]));
 		ft_strdel((void **)string);
 		string = temp;
 		if ((string[0]) == '\0')
@@ -74,10 +72,10 @@ static int	line_output(char *string, char *line)
 	}
 	else
 	{
-		line = ft_strdup(*string);
+		line = ft_strdup(string);
 		ft_strdel((void **)string);
 	}
-	return (1);
+	return ();
 }
 
 /*
@@ -107,13 +105,13 @@ char	*get_next_line(int fd)
 				return (NULL);
 		}
 		else
-			buffer_add(buffer, (array[fd]));
+			buffer_add((char *)buffer, &(array[fd]));
 		if (ft_strchr(array[fd], '\n'))
 			break ;
 	}
 	if ((read_return == 0) && (array[fd] == NULL))
 		return (NULL);
 	if (read_return != -1)
-		line_output(array[fd], line);
+		line_output(&(array[fd]), line);
 	return (line);
 }
