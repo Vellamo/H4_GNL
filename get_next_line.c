@@ -53,28 +53,28 @@ static void	buffer_add(char *buffer, char **array)
 ** Returns value based on **line output for GNL.c to use.
 */
 
-static int	line_output(char **string, char **line)
+static int	line_output(char *string, char *line)
 {
 	unsigned int	i;
 	char			*temp;
 
 	i = 0;
-	if (!string || !line)
+	if (!string)
 		return (-1);
-	while ((*string)[i] != '\0' && (*string)[i] != '\n')
+	while ((string[i]) != '\0' && (*string)[i] != '\n')
 		i++;
-	if ((*string)[i] == '\n')
+	if ((string)[i]) == '\n')
 	{
-		*line = ft_substr(*string, 0, i);
-		temp = ft_strdup(&((*string)[i + 1]));
+		line = ft_substr(string, 0, i);
+		temp = ft_strdup((string[i + 1]));
 		ft_strdel((void **)string);
-		*string = temp;
-		if ((*string)[0] == '\0')
+		string = temp;
+		if ((string[0]) == '\0')
 			ft_strdel((void **)string);
 	}
 	else
 	{
-		*line = ft_strdup(*string);
+		line = ft_strdup(*string);
 		ft_strdel((void **)string);
 	}
 	return (1);
@@ -87,16 +87,16 @@ static int	line_output(char **string, char **line)
 
 char	*get_next_line(int fd)
 {
-	static char	*array[FD_SIZE];
+	static char	*array;
 	char		buffer[BUFFER_SIZE + 1];
-	char		**line;
+	char		*line;
 	int			read_return;
 
 	read_return = 1;
 	line = 0;
 	if (!BUFFER_SIZE)
 		return (NULL);
-	if (fd < 0 || fd > FD_SIZE || BUFFER_SIZE < 1)
+	if (fd < 0 || BUFFER_SIZE < 1)
 		return (NULL);
 	while ((read_return = (read(fd, buffer, BUFFER_SIZE))) > 0)
 	{
@@ -107,13 +107,13 @@ char	*get_next_line(int fd)
 				return (NULL);
 		}
 		else
-			buffer_add(buffer, &(array[fd]));
+			buffer_add(buffer, (array[fd]));
 		if (ft_strchr(array[fd], '\n'))
 			break ;
 	}
 	if ((read_return == 0) && (array[fd] == NULL))
 		return (NULL);
 	if (read_return != -1)
-		read_return = line_output(&(array[fd]), line);
-	return (*line);
+		line_output(array[fd], line);
+	return (line);
 }
