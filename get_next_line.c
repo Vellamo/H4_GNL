@@ -107,12 +107,12 @@ char	*get_next_line(int fd)
 		}
 		else
 			buffer_add((char *)buffer, array[fd]);
-		if (ft_strchr(&(array[fd]), '\n'))
+		if (ft_strchr(array[fd], '\n'))
 			break ;
 	}
 	if ((read_return == 0) && (array[fd] == NULL))
 		return (NULL);
 	if (read_return != -1)
-		return (line_output(array[fd]), line));
+		return (line_output(array[fd], line));
 	return (NULL);
 }
