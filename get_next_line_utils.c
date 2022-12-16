@@ -1,8 +1,8 @@
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *s)
+unsigned int	ft_strlen(const char *s)
 {
-	size_t i;
+	unsigned int i;
 
 	i = 0;
 	while (s[i] != '\0')
@@ -10,9 +10,9 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-void	*ft_memcpy(void *dst, const void *src, size_t n)
+void	*ft_memcpy(void *dst, const void *src, unsigned int n)
 {
-	size_t	i;
+	unsigned int	i;
 
 	i = 0;
 	if (!n || dst == src)
@@ -72,11 +72,11 @@ char	*ft_strdup(const char *s1)
 		return (NULL);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_substr(char const *s, unsigned int start, unsigned int len)
 {
 	char			*fresh;
-	size_t			i;
-	size_t			strlen;
+	unsigned int	i;
+	unsigned int	strlen;
 
 	i = 0;
 	if (!s || !len)
