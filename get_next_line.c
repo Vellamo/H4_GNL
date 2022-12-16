@@ -12,9 +12,23 @@
 
 #include "get_next_line.h"
 
+void	ft_bzero(void *s, size_t n)
+{
+	size_t			i;
+	unsigned char	*t;
+
+	t = (unsigned char *)s;
+	i = 0;
+	while (i < n)
+	{
+		t[i] = 0;
+		i++;
+	}
+}
+
 void	ft_strdel(void **as)
 {
-	if (!as)
+	if (!*as)
 		return ;
 	free(*as);
 	*as = 0;
@@ -65,15 +79,15 @@ static char	*line_output(char *string, char *line)
 	{
 		line = ft_substr(string, 0, i);
 		temp = ft_strdup(&(string[i + 1]));
-		ft_strdel((void **)string);
+		ft_strdel(string);
 		string = temp;
 		if ((string[0]) == '\0')
-			ft_strdel((void **)string);
+			ft_strdel(string);
 	}
 	else
 	{
 		line = ft_strdup(string);
-		ft_strdel((void **)string);
+		ft_strdel(string);
 	}
 	return (line);
 }
@@ -85,13 +99,14 @@ static char	*line_output(char *string, char *line)
 
 char	*get_next_line(int fd)
 {
-	static char	**array;
+	static char	*array[2048];
 	char		buffer[BUFFER_SIZE + 1];
 	char		*line;
 	int			read_return;
 
 	read_return = 1;
 	line = 0;
+	ft_bzero(array, 2048);
 	if (!BUFFER_SIZE)
 		return (NULL);
 	if (fd < 0 || BUFFER_SIZE < 1)
