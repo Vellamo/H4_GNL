@@ -12,23 +12,9 @@
 
 #include "get_next_line.h"
 
-void	ft_bzero(void *s, size_t n)
-{
-	size_t			i;
-	unsigned char	*t;
-
-	t = (unsigned char *)s;
-	i = 0;
-	while (i < n)
-	{
-		t[i] = 0;
-		i++;
-	}
-}
-
 void	ft_strdel(void **as)
 {
-	if (!*as)
+	if (!(*as))
 		return ;
 	free(*as);
 	*as = 0;
@@ -53,18 +39,18 @@ char	*ft_strchr(const char *s, int c)
 ** Overlap-safe way to add new data to the existing data.
 */
 
-static void	buffer_add(char *buffer, char *array)
+static void	buffer_add(char *buffer, char **array)
 {
 	char		*swap;
 
-	swap = ft_strjoin(array, buffer);
-	free(array);
-	array = swap;
+	swap = ft_strjoin(*array, buffer);
+	free(*array);
+	*array = swap;
 }
 
 /*
 ** line_output finds a defined EOF. Frees memory not needed.
-** Returns value based on **line output for GNL.c to use.
+** Returns string, or null based on parameters given.
 */
 
 static char	*line_output(char *string, char *line)
@@ -73,21 +59,23 @@ static char	*line_output(char *string, char *line)
 	char			*temp;
 
 	i = 0;
+	if (!string || !line)
+		return (NULL);
 	while ((string[i]) != '\0' && (string[i]) != '\n')
 		i++;
 	if ((string[i]) == '\n')
 	{
 		line = ft_substr(string, 0, i);
 		temp = ft_strdup(&(string[i + 1]));
-		ft_strdel(string);
+		ft_strdel((void **)&string);
 		string = temp;
-		if ((string[0]) == '\0')
-			ft_strdel(string);
+		if (string[0] == '\0')
+			ft_strdel((void **)&string);
 	}
 	else
 	{
 		line = ft_strdup(string);
-		ft_strdel(string);
+		ft_strdel((void **)&string);
 	}
 	return (line);
 }
@@ -99,17 +87,14 @@ static char	*line_output(char *string, char *line)
 
 char	*get_next_line(int fd)
 {
-	static char	*array[2048];
+	static char	*array[1024];
 	char		buffer[BUFFER_SIZE + 1];
 	char		*line;
 	int			read_return;
 
 	read_return = 1;
-	line = 0;
-	ft_bzero(array, 2048);
-	if (!BUFFER_SIZE)
-		return (NULL);
-	if (fd < 0 || BUFFER_SIZE < 1)
+	*line = NULL;
+	if (!BUFFER_SIZE || fd < 0 || BUFFER_SIZE < 1)
 		return (NULL);
 	while ((read_return = (read(fd, buffer, BUFFER_SIZE))) > 0)
 	{
@@ -121,7 +106,7 @@ char	*get_next_line(int fd)
 				return (NULL);
 		}
 		else
-			buffer_add((char *)buffer, array[fd]);
+			buffer_add(buffer, &(array[fd]));
 		if (ft_strchr(array[fd], '\n'))
 			break ;
 	}
