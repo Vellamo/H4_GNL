@@ -50,38 +50,32 @@ static void	buffer_add(char *buffer, char **array)
 
 /*
 ** line_output finds a defined EOF. Frees memory not needed.
-** Returns string, or null based on parameters given.
+** Returns char_line, or null based on parameters given.
 */
 
-static char	*line_output(char *string, char *line)
+static char	*line_output(char *arr_str, int red_ret)
 {
 	unsigned int	i;
 	char			*temp;
+	char			*gnl_out;
 
 	i = 0;
-	if (!string || !line)
+	if (!arr_str)
 		return (NULL);
-	while ((string[i]) != '\0' && (string[i]) != '\n')
+	if (!(*arr_str))
+		return (NULL);
+	while ((arr_str[i]) != '\0' && (arr_str[i]) != '\n' && i <= red_ret)
 		i++;
-	if ((string[i]) == '\n')
-	{
-		line = ft_substr(string, 0, i);
-		temp = ft_strdup(&(string[i + 1]));
-		ft_strdel((void **)&string);
-		string = temp;
-		if (string[0] == '\0')
-			ft_strdel((void **)&string);
-	}
-	else
-	{
-		line = ft_strdup(string);
-		ft_strdel((void **)&string);
-	}
-	return (line);
+	gnl_out = ft_substr(arr_str, 0, i);
+	temp = ft_strdup(&(arr_str[i + 1]));
+	ft_strdel((void **)&arr_str);
+	arr_str = temp;
+	return (gnl_out);
 }
 
 /*
-** Read continues until \n is found, upon which it breaks the loop.
+** Read continues until \n is found for BUFFER_SIZE bytes
+** reading into "buffer", upon which it breaks the loop.
 ** If the array is empty and read is finished, returns NULL
 */
 
@@ -89,17 +83,15 @@ char	*get_next_line(int fd)
 {
 	static char	*array[1024];
 	char		buffer[BUFFER_SIZE + 1];
-	char		*line;
 	int			read_return;
 
 	read_return = 1;
-	*line = NULL;
-	if (!BUFFER_SIZE || fd < 0 || BUFFER_SIZE < 1)
+	if (!BUFFER_SIZE || BUFFER_SIZE < 1 || fd < 0)
 		return (NULL);
 	while ((read_return = (read(fd, buffer, BUFFER_SIZE))) > 0)
 	{
 		buffer[read_return] = '\0';
-		if (array[fd] == NULL)
+		if (*(array[fd]) == 0)
 		{
 			array[fd] = ft_strdup(buffer);
 			if (!(array[fd]))
@@ -113,6 +105,6 @@ char	*get_next_line(int fd)
 	if ((read_return == 0) && (array[fd] == NULL))
 		return (NULL);
 	if (read_return != -1)
-		return (line_output(array[fd], line));
+		return (line_output(array[fd], read_return));
 	return (NULL);
 }
