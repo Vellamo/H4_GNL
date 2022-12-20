@@ -39,13 +39,13 @@ char	*ft_strchr(const char *s, int c)
 ** Overlap-safe way to add new data to the existing data.
 */
 
-static void	buffer_add(char *buffer, char **array)
+static void	buffer_add(char *buffer, char *array)
 {
 	char		*swap;
 
-	swap = ft_strjoin(*array, buffer);
-	free(*array);
-	*array = swap;
+	swap = ft_strjoin(array, buffer);
+	free(array);
+	array = swap;
 }
 
 /*
@@ -60,21 +60,23 @@ static char	*line_output(char *arr_str, int red_ret)
 	char			*gnl_out;
 
 	i = 0;
-	if (!arr_str)
-		return (NULL);
-	if (!(*arr_str))
+	if (!arr_str || !(*arr_str))
 		return (NULL);
 	while ((arr_str[i]) != '\0' && (arr_str[i]) != '\n' && i <= red_ret)
 		i++;
 	gnl_out = ft_substr(arr_str, 0, i);
-	temp = ft_strdup(&(arr_str[i + 1]));
+	if (gnl_out != NULL)
+	{
+		temp = ft_strdup(&(arr_str[i + 1]));
+		if (temp == NULL)
+		{
+			free(gnl_out);
+			return (NULL);
+		}
+	}
 	ft_strdel((void **)&arr_str);
-	if (temp == NULL)
-+	{
-+		free(gnl_out);
-+		return (NULL);
-+	}
 	arr_str = temp;
+	free(gnl_out);
 	return (gnl_out);
 }
 
@@ -90,7 +92,7 @@ char	*get_next_line(int fd)
 	char		buffer[BUFFER_SIZE + 1];
 	int			read_return;
 
-	read_return = 1;
+	read_return = 0;
 	if (!BUFFER_SIZE || BUFFER_SIZE < 1 || fd < 0 || fd > 1023)
 		return (NULL);
 	while ((read_return = (read(fd, buffer, BUFFER_SIZE))) > 0)
@@ -103,11 +105,11 @@ char	*get_next_line(int fd)
 				return (NULL);
 		}
 		else
-			buffer_add(buffer, &(array[fd]));
+			buffer_add(buffer, array[fd]);
 		if (ft_strchr(array[fd], '\n'))
 			break ;
 	}
-	if ((read_return == 0) && (array[fd] == NULL))
+	if ((read_return == 0) || (array[fd] == NULL))
 		return (NULL);
 	if (read_return != -1)
 		return (line_output(array[fd], read_return));
