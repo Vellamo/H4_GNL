@@ -55,7 +55,7 @@ static void	buffer_add(char *buffer, char **array)
 
 static char	*line_output(char *arr_str, int red_ret)
 {
-	unsigned int	i;
+	int	i;
 	char			*temp;
 	char			*gnl_out;
 
@@ -69,6 +69,11 @@ static char	*line_output(char *arr_str, int red_ret)
 	gnl_out = ft_substr(arr_str, 0, i);
 	temp = ft_strdup(&(arr_str[i + 1]));
 	ft_strdel((void **)&arr_str);
+	if (temp == NULL)
++	{
++		free(gnl_out);
++		return (NULL);
++	}
 	arr_str = temp;
 	return (gnl_out);
 }
@@ -86,12 +91,12 @@ char	*get_next_line(int fd)
 	int			read_return;
 
 	read_return = 1;
-	if (!BUFFER_SIZE || BUFFER_SIZE < 1 || fd < 0)
+	if (!BUFFER_SIZE || BUFFER_SIZE < 1 || fd < 0 || fd > 1023)
 		return (NULL);
 	while ((read_return = (read(fd, buffer, BUFFER_SIZE))) > 0)
 	{
 		buffer[read_return] = '\0';
-		if (*(array[fd]) == 0)
+		if (array[fd] == NULL)
 		{
 			array[fd] = ft_strdup(buffer);
 			if (!(array[fd]))
