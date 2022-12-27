@@ -39,7 +39,7 @@ char	*ft_strchr(const char *s, int c)
 ** Overlap-safe way to add new data to the existing data.
 */
 
-static void	buffer_add(char *buffer, char **array)
+void	buffer_add(char *buffer, char **array)
 {
 	char		*swap;
 
@@ -47,6 +47,7 @@ static void	buffer_add(char *buffer, char **array)
 	free(*array);
 	*array = swap;
 }
+
 
 /*
 ** line_output finds a defined EOF. Frees memory not needed.
@@ -57,33 +58,30 @@ static char	*line_output(char *arr_str)
 {
 	int		i;
 	char	*gnl_out;
+	char	*temp;
 
 	i = 0;
-	if (!arr_str || !(*arr_str))
+	gnl_out = NULL;
+	temp = NULL;
+	if (!arr_str)
 		return (NULL);
 	if (arr_str[0] == '\0')
 	{
-			ft_strdel(&arr_str);
-			return (NULL);
+		ft_strdel((void **)(&arr_str));
+		return (NULL);
 	}
 	while ((arr_str[i]) != '\0' && (arr_str[i]) != '\n')
 		i++;
 	if (arr_str[i] == '\n')
 	{
 		gnl_out = ft_substr(arr_str, 0, i);
-		if (gnl_out == NULL)
-			return (NULL);
-		arr_str = ft_strdup(&(arr_str[i + 1]));
-		if (arr_str == NULL)
-		{
-			free(gnl_out);
-			return (NULL);
-		}
+		temp = ft_strdup(&(arr_str[i + 1]));
+		ft_strdel((void **)(&arr_str));
+		arr_str = temp;
 	}
 	else
 	{
-		gnl_out = ft_strdup(arr_str);
-		ft_strdel(arr_str);
+		ft_strdel((void **)(&arr_str));
 	}
 	return (gnl_out);
 }
@@ -100,10 +98,9 @@ char	*get_next_line(int fd)
 	char		buffer[BUFFER_SIZE + 1];
 	int			read_return;
 
-	read_return = 0;
+	read_return = (read(fd, buffer, BUFFER_SIZE));
 	if (!BUFFER_SIZE || BUFFER_SIZE < 1 || fd < 0 || fd > 1023)
 		return (NULL);
-	read_return = (read(fd, buffer, BUFFER_SIZE));
 	while (read_return > 0)
 	{
 		buffer[BUFFER_SIZE] = '\0';
@@ -119,9 +116,7 @@ char	*get_next_line(int fd)
 			break ;
 		read_return = (read(fd, buffer, BUFFER_SIZE));
 	}
-	if (read_return == 0 && array[fd] == NULL)
-		return (NULL);
-	if (read_return != -1)
+	if (read_return > 0)
 		return (line_output(array[fd]));
 	return (NULL);
 }
