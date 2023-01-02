@@ -39,15 +39,20 @@ char	*ft_strchr(const char *s, int c)
 ** Overlap-safe way to add new data to the existing data.
 */
 
-static void	array_add(char *array, char *buffer)
+static char	*array_add(char *array, char *buffer)
 {
 	char		*swap;
 
-	swap = ft_strjoin(array, buffer);
+	if (!buffer)
+		return (array);
+	if (array[0] == '\0')
+		swap = ft_strdup(buffer);
+	else
+		swap = ft_strjoin(array, buffer);
 	free(array);
 	array = swap;
+	return (swap);
 }
-
 
 /*
 ** line_output finds a defined EOF. Frees memory not needed.
@@ -56,25 +61,29 @@ static void	array_add(char *array, char *buffer)
 
 static char	*line_output(char *arr_str)
 {
-	int		i;
+	unsigned int		i;
+	unsigned int len;
 	char	*gnl_out;
 	char	*temp;
 
 	i = 0;
+	len = ft_strlen(arr_str);
 	gnl_out = NULL;
 	temp = NULL;
 	if (!arr_str)
 		return (NULL);
-	while ((arr_str[i]) != '\0' && (arr_str[i]) != '\n')
+	while (arr_str[i] != '\0' && (arr_str[i]) != '\n')
 		i++;
 	if (arr_str[i] == '\n')
+		i++;
+	if (i != 0 || i != len)
 	{
 		gnl_out = ft_substr(arr_str, 0, i);
-		temp = ft_strdup(&(arr_str[i + 1]));
-		ft_strdel((void **)(&arr_str));
+		temp = ft_substr(arr_str, (i), (len - i));
+		free(arr_str);
 		arr_str = temp;
 	}
-	else
+	else if (arr_str[0] == '\0')
 	{
 		ft_strdel((void **)(&arr_str));
 	}
@@ -90,15 +99,17 @@ static char	*line_output(char *arr_str)
 char	*get_next_line(int fd)
 {
 	static char	*array[1024];
-	char		buffer[BUFFER_SIZE + 1];
+	char		buffer[BUFFER_SIZE];
 	int			read_return;
 
-	read_return = (read(fd, buffer, BUFFER_SIZE));
 	if (!BUFFER_SIZE || BUFFER_SIZE < 1 || fd < 0 || fd > 1023)
 		return (NULL);
+	read_return = (read(fd, buffer, BUFFER_SIZE));
+	if (read_return <= 0)
+		return (NULL);
+	buffer[read_return] = '\0';
 	while (read_return > 0)
 	{
-		buffer[BUFFER_SIZE] = '\0';
 		if (array[fd] == NULL)
 		{
 			array[fd] = ft_strdup(buffer);
@@ -106,14 +117,14 @@ char	*get_next_line(int fd)
 				return (NULL);
 		}
 		else
-			array_add(array[fd], buffer);
+			array[fd] = array_add(array[fd], buffer);
+		if (array[fd] == NULL)
+			return (NULL);
 		if (ft_strchr(array[fd], '\n'))
 			break ;
 		read_return = (read(fd, buffer, BUFFER_SIZE));
 	}
 	if ((read_return <= 0) && (array[fd] == NULL))
 		return (NULL);
-	if (read_return > 0)
-		return (line_output(array[fd]));
-	return (NULL);
+	return (line_output(array[fd]));
 }
