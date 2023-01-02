@@ -39,13 +39,13 @@ char	*ft_strchr(const char *s, int c)
 ** Overlap-safe way to add new data to the existing data.
 */
 
-void	buffer_add(char *buffer, char **array)
+static void	array_add(char *array, char *buffer)
 {
 	char		*swap;
 
-	swap = ft_strjoin(*array, buffer);
-	free(*array);
-	*array = swap;
+	swap = ft_strjoin(array, buffer);
+	free(array);
+	array = swap;
 }
 
 
@@ -65,11 +65,6 @@ static char	*line_output(char *arr_str)
 	temp = NULL;
 	if (!arr_str)
 		return (NULL);
-	if (arr_str[0] == '\0')
-	{
-		ft_strdel((void **)(&arr_str));
-		return (NULL);
-	}
 	while ((arr_str[i]) != '\0' && (arr_str[i]) != '\n')
 		i++;
 	if (arr_str[i] == '\n')
@@ -111,11 +106,13 @@ char	*get_next_line(int fd)
 				return (NULL);
 		}
 		else
-			buffer_add(buffer, &(array[fd]));
+			array_add(array[fd], buffer);
 		if (ft_strchr(array[fd], '\n'))
 			break ;
 		read_return = (read(fd, buffer, BUFFER_SIZE));
 	}
+	if ((read_return <= 0) && (array[fd] == NULL))
+		return (NULL);
 	if (read_return > 0)
 		return (line_output(array[fd]));
 	return (NULL);
