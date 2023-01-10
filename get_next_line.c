@@ -6,7 +6,7 @@
 /*   By: lharvey <lharvey@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 09:58:12 by lharvey           #+#    #+#             */
-/*   Updated: 2023/01/10 15:46:55 by lharvey          ###   ########.fr       */
+/*   Updated: 2023/01/10 16:06:47 by lharvey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,9 @@ static char	*line_output(char **arr_str, int read_ret)
 		free((*arr_str));
 		*arr_str = temp;
 	}
-	else
+	else if (read_ret != 0)
 	{
-		gnl_out = (char *)malloc(((read_ret - len) + 1) * (sizeof(char)));
-		ft_memcpy(gnl_out, *arr_str, (read_ret - len));
+		gnl_out = ft_substr((*arr_str), 0, i + read_ret);
 		ft_strdel((void **)arr_str);
 	}
 	return (gnl_out);
