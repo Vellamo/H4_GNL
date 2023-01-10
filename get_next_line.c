@@ -6,7 +6,7 @@
 /*   By: lharvey <lharvey@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 09:58:12 by lharvey           #+#    #+#             */
-/*   Updated: 2023/01/10 13:55:45 by lharvey          ###   ########.fr       */
+/*   Updated: 2023/01/10 15:22:52 by lharvey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,10 @@ static char	*line_output(char **arr_str)
 	char			*gnl_out;
 	char			*temp;
 
-	i = 0;
-	gnl_out = NULL;
-	temp = NULL;
 	if (!(*arr_str))
 		return (NULL);
+	i = 0;
+	gnl_out = NULL;
 	len = ft_strlen((*arr_str));
 	while ((*arr_str)[i] != '\0' && ((*arr_str)[i]) != '\n')
 		i++;
@@ -84,9 +83,7 @@ static char	*line_output(char **arr_str)
 		*arr_str = temp;
 	}
 	if ((*arr_str)[0] == '\0')
-	{
 		ft_strdel((void **)arr_str);
-	}
 	return (gnl_out);
 }
 
