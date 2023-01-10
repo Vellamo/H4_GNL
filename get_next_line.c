@@ -6,7 +6,7 @@
 /*   By: lharvey <lharvey@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 09:58:12 by lharvey           #+#    #+#             */
-/*   Updated: 2022/12/02 16:35:58 by lharvey          ###   ########.fr       */
+/*   Updated: 2023/01/10 13:55:45 by lharvey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,10 @@ char	*ft_strchr(const char *s, int c)
 
 static char	*array_add(char *array, char *buffer)
 {
-	char		*swap;
+	char	*swap;
 
 	if (!buffer)
-		return (array);
+		return (NULL);
 	if (array[0] == '\0')
 		swap = ft_strdup(buffer);
 	else
@@ -56,36 +56,36 @@ static char	*array_add(char *array, char *buffer)
 
 /*
 ** line_output finds a defined EOF. Frees memory not needed.
-** Returns char_line, or null based on parameters given.
+** Returns gnl_out, or null based on parameter given.
 */
 
-static char	*line_output(char *arr_str)
+static char	*line_output(char **arr_str)
 {
-	unsigned int		i;
-	unsigned int len;
-	char	*gnl_out;
-	char	*temp;
+	unsigned int	i;
+	unsigned int	len;
+	char			*gnl_out;
+	char			*temp;
 
 	i = 0;
-	len = ft_strlen(arr_str);
 	gnl_out = NULL;
 	temp = NULL;
-	if (!arr_str)
+	if (!(*arr_str))
 		return (NULL);
-	while (arr_str[i] != '\0' && (arr_str[i]) != '\n')
+	len = ft_strlen((*arr_str));
+	while ((*arr_str)[i] != '\0' && ((*arr_str)[i]) != '\n')
 		i++;
-	if (arr_str[i] == '\n')
+	if ((*arr_str)[i] == '\n')
 		i++;
-	if (i != 0 || i != len)
+	if (i != 0)
 	{
-		gnl_out = ft_substr(arr_str, 0, i);
-		temp = ft_substr(arr_str, (i), (len - i));
-		free(arr_str);
-		arr_str = temp;
+		gnl_out = ft_substr((*arr_str), 0, i);
+		temp = ft_substr((*arr_str), i, (len - i));
+		free((*arr_str));
+		*arr_str = temp;
 	}
-	else if (arr_str[0] == '\0')
+	if ((*arr_str)[0] == '\0')
 	{
-		ft_strdel((void **)(&arr_str));
+		ft_strdel((void **)arr_str);
 	}
 	return (gnl_out);
 }
@@ -99,7 +99,7 @@ static char	*line_output(char *arr_str)
 char	*get_next_line(int fd)
 {
 	static char	*array[1024];
-	char		buffer[BUFFER_SIZE];
+	char		buffer[BUFFER_SIZE + 1];
 	int			read_return;
 
 	if (!BUFFER_SIZE || BUFFER_SIZE < 1 || fd < 0 || fd > 1023)
@@ -107,17 +107,13 @@ char	*get_next_line(int fd)
 	read_return = (read(fd, buffer, BUFFER_SIZE));
 	if (read_return <= 0)
 		return (NULL);
-	buffer[read_return] = '\0';
 	while (read_return > 0)
 	{
-		if (array[fd] == NULL)
-		{
-			array[fd] = ft_strdup(buffer);
-			if (!(array[fd]))
-				return (NULL);
-		}
-		else
+		buffer[read_return] = '\0';
+		if (array[fd] != NULL)
 			array[fd] = array_add(array[fd], buffer);
+		else
+			array[fd] = ft_strdup(buffer);
 		if (array[fd] == NULL)
 			return (NULL);
 		if (ft_strchr(array[fd], '\n'))
@@ -126,5 +122,5 @@ char	*get_next_line(int fd)
 	}
 	if ((read_return <= 0) && (array[fd] == NULL))
 		return (NULL);
-	return (line_output(array[fd]));
+	return (line_output(&(array[fd])));
 }

@@ -6,7 +6,7 @@
 /*   By: lharvey <lharvey@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 10:00:18 by lharvey           #+#    #+#             */
-/*   Updated: 2022/12/02 16:08:28 by lharvey          ###   ########.fr       */
+/*   Updated: 2023/01/10 12:58:59 by lharvey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,7 @@ void	*ft_memcpy(void *dst, const void *src, unsigned int n);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*get_next_line(int fd);
 
+#endif
+#ifndef BUFFER_SIZE
+# define BUFFER_SIZE 1024
 #endif
