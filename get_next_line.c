@@ -6,7 +6,7 @@
 /*   By: lharvey <lharvey@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 09:58:12 by lharvey           #+#    #+#             */
-/*   Updated: 2023/01/10 15:22:52 by lharvey          ###   ########.fr       */
+/*   Updated: 2023/01/10 15:46:55 by lharvey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static char	*array_add(char *array, char *buffer)
 ** Returns gnl_out, or null based on parameter given.
 */
 
-static char	*line_output(char **arr_str)
+static char	*line_output(char **arr_str, int read_ret)
 {
 	unsigned int	i;
 	unsigned int	len;
@@ -74,16 +74,19 @@ static char	*line_output(char **arr_str)
 	while ((*arr_str)[i] != '\0' && ((*arr_str)[i]) != '\n')
 		i++;
 	if ((*arr_str)[i] == '\n')
-		i++;
-	if (i != 0)
 	{
+		i++;
 		gnl_out = ft_substr((*arr_str), 0, i);
 		temp = ft_substr((*arr_str), i, (len - i));
 		free((*arr_str));
 		*arr_str = temp;
 	}
-	if ((*arr_str)[0] == '\0')
+	else
+	{
+		gnl_out = (char *)malloc(((read_ret - len) + 1) * (sizeof(char)));
+		ft_memcpy(gnl_out, *arr_str, (read_ret - len));
 		ft_strdel((void **)arr_str);
+	}
 	return (gnl_out);
 }
 
@@ -119,5 +122,5 @@ char	*get_next_line(int fd)
 	}
 	if ((read_return <= 0) && (array[fd] == NULL))
 		return (NULL);
-	return (line_output(&(array[fd])));
+	return (line_output(&(array[fd]), read_return));
 }
