@@ -45,7 +45,7 @@ static char	*array_add(char *array, char *buffer)
 
 	if (!buffer)
 		return (NULL);
-	if (array[0] == '\0')
+	if (array == NULL)
 		swap = ft_strdup(buffer);
 	else
 		swap = ft_strjoin(array, buffer);
@@ -59,15 +59,13 @@ static char	*array_add(char *array, char *buffer)
 ** Returns gnl_out, or null based on parameter given.
 */
 
-static char	*line_output(char **arr_str, int read_ret)
+static char	*line_output(char **arr_str)
 {
 	unsigned int	i;
 	unsigned int	len;
 	char			*gnl_out;
 	char			*temp;
 
-	if (!(*arr_str))
-		return (NULL);
 	i = 0;
 	gnl_out = NULL;
 	len = ft_strlen((*arr_str));
@@ -80,10 +78,12 @@ static char	*line_output(char **arr_str, int read_ret)
 		temp = ft_substr((*arr_str), i, (len - i));
 		free((*arr_str));
 		*arr_str = temp;
+		if ((*arr_str)[0] == '\0')
+			ft_strdel((void **)arr_str);
 	}
-	else if (read_ret != 0)
+	else
 	{
-		gnl_out = ft_substr((*arr_str), 0, i + read_ret);
+		gnl_out = ft_strdup(*arr_str);
 		ft_strdel((void **)arr_str);
 	}
 	return (gnl_out);
@@ -104,22 +104,19 @@ char	*get_next_line(int fd)
 	if (!BUFFER_SIZE || BUFFER_SIZE < 1 || fd < 0 || fd > 1023)
 		return (NULL);
 	read_return = (read(fd, buffer, BUFFER_SIZE));
-	if (read_return <= 0)
+	if (read_return < 0)
 		return (NULL);
 	while (read_return > 0)
 	{
 		buffer[read_return] = '\0';
-		if (array[fd] != NULL)
-			array[fd] = array_add(array[fd], buffer);
-		else
-			array[fd] = ft_strdup(buffer);
+		array[fd] = array_add(array[fd], buffer);
 		if (array[fd] == NULL)
 			return (NULL);
 		if (ft_strchr(array[fd], '\n'))
 			break ;
 		read_return = (read(fd, buffer, BUFFER_SIZE));
 	}
-	if ((read_return <= 0) && (array[fd] == NULL))
+	if (array[fd] == NULL && read_return == 0)
 		return (NULL);
-	return (line_output(&(array[fd]), read_return));
+	return (line_output(&(array[fd])));
 }
