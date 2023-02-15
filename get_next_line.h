@@ -6,13 +6,12 @@
 /*   By: lharvey <lharvey@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 10:00:18 by lharvey           #+#    #+#             */
-/*   Updated: 2023/01/10 12:58:59 by lharvey          ###   ########.fr       */
+/*   Updated: 2023/02/15 11:15:49 by lharvey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-
 # include	<unistd.h>
 # include	<stdlib.h>
 

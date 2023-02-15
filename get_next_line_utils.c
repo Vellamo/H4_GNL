@@ -6,7 +6,7 @@
 /*   By: lharvey <lharvey@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 11:04:49 by lharvey           #+#    #+#             */
-/*   Updated: 2023/02/15 11:04:56 by lharvey          ###   ########.fr       */
+/*   Updated: 2023/02/15 11:15:11 by lharvey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 unsigned int	ft_strlen(const char *s)
 {
-	unsigned int i;
+	unsigned int	i;
 
 	i = 0;
 	while (s[i] != '\0')
