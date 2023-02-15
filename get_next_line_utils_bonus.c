@@ -6,11 +6,11 @@
 /*   By: lharvey <lharvey@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 11:04:49 by lharvey           #+#    #+#             */
-/*   Updated: 2023/02/15 11:23:27 by lharvey          ###   ########.fr       */
+/*   Updated: 2023/02/15 11:48:34 by lharvey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 unsigned int	ft_strlen(const char *s)
 {
