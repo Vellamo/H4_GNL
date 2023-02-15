@@ -6,7 +6,7 @@
 /*   By: lharvey <lharvey@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 09:58:12 by lharvey           #+#    #+#             */
-/*   Updated: 2023/01/10 16:06:47 by lharvey          ###   ########.fr       */
+/*   Updated: 2023/02/15 11:12:55 by lharvey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,14 +68,13 @@ static char	*line_output(char **arr_str)
 
 	i = 0;
 	gnl_out = NULL;
-	len = ft_strlen((*arr_str));
 	while ((*arr_str)[i] != '\0' && ((*arr_str)[i]) != '\n')
 		i++;
 	if ((*arr_str)[i] == '\n')
 	{
 		i++;
 		gnl_out = ft_substr((*arr_str), 0, i);
-		temp = ft_substr((*arr_str), i, (len - i));
+		temp = ft_substr((*arr_str), i, ((ft_strlen((*arr_str))) - i));
 		free((*arr_str));
 		*arr_str = temp;
 		if ((*arr_str)[0] == '\0')
@@ -104,8 +103,6 @@ char	*get_next_line(int fd)
 	if (!BUFFER_SIZE || BUFFER_SIZE < 1 || fd < 0 || fd > 1023)
 		return (NULL);
 	read_return = (read(fd, buffer, BUFFER_SIZE));
-	if (read_return < 0)
-		return (NULL);
 	while (read_return > 0)
 	{
 		buffer[read_return] = '\0';
@@ -116,7 +113,7 @@ char	*get_next_line(int fd)
 			break ;
 		read_return = (read(fd, buffer, BUFFER_SIZE));
 	}
-	if (array[fd] == NULL && read_return == 0)
+	if ((array[fd] == NULL && read_return == 0) || read_return < 0)
 		return (NULL);
 	return (line_output(&(array[fd])));
 }
